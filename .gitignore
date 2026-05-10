@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+output/
+.DS_Store
+.pytest_cache/
+
+# Sample inputs (not committed by default — bring your own PDF)
+*.pdf
