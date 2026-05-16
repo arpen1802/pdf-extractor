@@ -8,3 +8,7 @@ output/
 
 # Sample inputs (not committed by default — bring your own PDF)
 *.pdf
+
+# Secrets
+.env
+.env.*

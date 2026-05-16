@@ -34,3 +34,21 @@ class Region(BaseModel):
     confidence: Optional[float] = None
     cluster_id: Optional[str] = None
     needs_agent: bool = False
+
+
+class PageBrief(BaseModel):
+    """Stage 1 output: high-level description of a page used as context
+    for the agent stage. Produced once per page from a downsampled image.
+    """
+
+    document_type: str
+    primary_subject: str
+    has_legend: bool
+    legend_location: Optional[str] = None
+    has_scale_bar: bool
+    scale_info: Optional[str] = None
+    has_north_arrow: bool
+    dense_text_zones: list[str] = []
+    sparse_text_zones: list[str] = []
+    expected_label_types: list[str] = []
+    notes: str = ""
