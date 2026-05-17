@@ -30,9 +30,13 @@ class Region(BaseModel):
     page: int
     bbox: BBox
     polygon: list[tuple[int, int]] = []
+    # Rotation angle of the text line in degrees (-180, 180].
+    # 0 = horizontal left-to-right, 90 = bottom-to-top, -90 = top-to-bottom.
+    angle: float = 0.0
     text: Optional[str] = None
     confidence: Optional[float] = None
     cluster_id: Optional[str] = None
+    merged_text: Optional[str] = None  # lines joined in reading order within cluster
     needs_agent: bool = False
 
 

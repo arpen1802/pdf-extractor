@@ -4,9 +4,29 @@ We run detect+recognize in one shot for the deterministic skeleton; the
 agent stage (later) can re-recognize specific crops at higher zoom for
 low-confidence regions.
 """
+import math
 from pathlib import Path
 
 from .models import BBox, Region
+
+
+def _polygon_angle(polygon: list[tuple[int, int]]) -> float:
+    """Return the text-line angle in degrees from a 4-point polygon.
+
+    PaddleOCR orders points clockwise from the top-left corner, so the
+    bottom edge (p0 → p1) runs along the text baseline. We use that edge
+    to determine orientation, then normalise to (-90, 90] so that both
+    left-to-right and right-to-left reads of the same physical line get
+    the same angle bucket.
+    """
+    (x0, y0), (x1, y1) = polygon[0], polygon[1]
+    angle = math.degrees(math.atan2(y1 - y0, x1 - x0))
+    # Fold into (-90, 90] so 270° vertical == -90° vertical
+    if angle > 90:
+        angle -= 180
+    elif angle <= -90:
+        angle += 180
+    return angle
 
 _paddle = None
 
@@ -57,6 +77,7 @@ def detect_and_recognize(image_path: Path, page_num: int) -> list[Region]:
                 page=page_num,
                 bbox=bbox,
                 polygon=polygon,
+                angle=_polygon_angle(polygon),
                 text=text,
                 confidence=float(score),
             )

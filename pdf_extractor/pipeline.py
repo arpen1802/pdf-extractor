@@ -17,7 +17,6 @@ def run(
     out_dir: Path,
     dpi: int = 400,
     conf_threshold: float = 0.85,
-    merge_distance: int = 60,
 ) -> dict:
     pdf_path = Path(pdf_path)
     out_dir = Path(out_dir)
@@ -36,8 +35,8 @@ def run(
         regions = detect_and_recognize(page_path, page_num=i)
         console.log(f"  -> {len(regions)} text regions")
 
-        console.log(f"[bold cyan]Stage 3[/]: cluster page {i} (merge_distance={merge_distance}px)")
-        regions = cluster_regions(regions, merge_distance=merge_distance)
+        console.log(f"[bold cyan]Stage 3[/]: cluster page {i} (OBB-aware)")
+        regions = cluster_regions(regions)
         n_clusters = len({r.cluster_id for r in regions})
         console.log(f"  -> {n_clusters} clusters")
 
@@ -73,7 +72,6 @@ def run(
         "pdf": str(pdf_path),
         "dpi": dpi,
         "conf_threshold": conf_threshold,
-        "merge_distance": merge_distance,
         "pages": page_summaries,
         "regions": [r.model_dump() for r in all_regions],
     }

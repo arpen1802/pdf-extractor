@@ -17,9 +17,6 @@ def extract(
         0.85, "--confidence", "-c",
         help="Below this OCR confidence, regions are flagged for the agent stage.",
     ),
-    merge_distance: int = typer.Option(
-        60, "--merge-distance", help="Pixel gap under which regions cluster together."
-    ),
 ):
     """Run the deterministic skeleton (stages 0, 2, 3, 4) on a PDF."""
     run(
@@ -27,7 +24,6 @@ def extract(
         out_dir=out,
         dpi=dpi,
         conf_threshold=confidence,
-        merge_distance=merge_distance,
     )
 
 
